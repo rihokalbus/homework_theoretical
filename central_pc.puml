@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Error handling software architecture, central PC
+
+Person(user, "User", "")
+
+Container_Boundary(central_pc, "Central PC") {
+  Component(central_control, "Central control")
+  ComponentDb(subsystem_registry, "Subsystem registry")
+  Component(health, "Health component", $link="central_health_state.puml")
+  Rel_R(central_control, subsystem_registry, "Register")
+  Rel_L(health, subsystem_registry, "Update status")
+}
+
+System(subsystem_1, "Subsystem 1", $link="subsystem.puml")
+System(subsystem_2, "Subsystem 2", $link="subsystem.puml")
+System(subsystem_n, "Subsystem n", , $link="subsystem.puml")
+
+Rel(central_control, subsystem_1, "Command")
+Rel(central_control, subsystem_2, "Command")
+Rel(central_control, subsystem_n, "Command")
+
+Rel(health, subsystem_1, "Get status")
+Rel(health, subsystem_2, "Get status")
+Rel(health, subsystem_n, "Get status")
+
+Rel_Back(health, subsystem_1, "Notify")
+Rel_Back(health, subsystem_2, "Notify")
+Rel_Back(health, subsystem_n, "Notify")
+
+Rel(user, central_control, "Control")
+Rel(user, health, "Get status")
+
+SHOW_LEGEND()
+
+@enduml

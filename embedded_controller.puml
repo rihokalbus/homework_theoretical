@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Error handling software architecture, Subsystem
+
+Component(shared_bus, "Shared bus")
+
+Container_Boundary(subsystem, "Subsystem") {
+  Component(controller, "Device controller")
+  Component(hal, "HAL")
+  ComponentDb(cots_registry, "COTS registry")
+  Component(health, "Health component", $link="subsystem_health_state.puml")
+  Rel(controller, hal, "Command")
+  Rel_Back(controller, hal, "Result")
+  Rel(controller, cots_registry, "Register")
+  Rel(controller, cots_registry, "Update status")
+  Rel(health, cots_registry, "Get status")
+  Rel_R(controller, health, "Notify")
+}
+
+Container_Ext(cots_1, "COTS 1")
+Container_Ext(cots_n, "COTS n")
+BiRel(hal, cots_1, "Uses")
+BiRel(hal, cots_n, "Uses")
+
+BiRel(shared_bus, controller, "Uses")
+BiRel(shared_bus, health, "Uses")
+
+SHOW_LEGEND()
+
+@enduml

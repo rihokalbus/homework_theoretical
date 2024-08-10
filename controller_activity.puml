@@ -1,0 +1,47 @@
+@startuml
+start
+
+partition initController {
+repeat
+    :next item from the COTS registry;
+    :initialize COTS;
+    :write status to the COTS registry;
+    if (status?) then (error)
+        :notify health component;
+    endif
+repeat while (endOfRegistry?) is (no)
+}
+
+partition operatingLoop {
+
+    while (powered?) is (yes)
+        split
+            :listen common bus;
+            switch (message?)
+            case (functionRestart)
+                :initialize COTS;
+                :write status to the COTS registry;
+                if (status?) then (error)
+                    :notify health component;
+                endif
+            case ( controllerRestart )
+                :goto initController;
+            endswitch
+        split again
+            :Read COTSn status from the registry;
+            if (status?) then (not Down)
+                :Control COTSn;
+                :Update status in the COTS registry;
+                switch (result?)
+                case (OK)
+                    :Pass;
+                case (Level 1 error, Level 2 error, Timeout)
+                    :Notify health component;
+                endswitch
+            endif
+        end split
+    endwhile
+
+}
+stop
+@enduml

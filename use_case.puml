@@ -1,0 +1,9 @@
+@startuml
+
+skinparam actorStyle awesome
+:User: --> (System overview)
+:User: --> (Restart function)
+:User: --> (Restart subsystem)
+:User: --> (Restart system)
+
+@enduml

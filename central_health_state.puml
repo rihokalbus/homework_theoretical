@@ -1,0 +1,45 @@
+@startuml
+scale 500 width
+
+[*] --> CheckSubsystems : [Startup]
+
+state CheckSubsystems {
+[*] --> ReadSubsystemRegistry
+ReadSubsystemRegistry --> RequestSubsystemState : [NextItem]
+RequestSubsystemState --> UpdateSubsystemState : HealthResponse
+RequestSubsystemState --> UpdateSubsystemState : [Timeout]
+RequestSubsystemState : Send health request to subsystems health component
+UpdateSubsystemState : Update subsystem state\nin the registry
+ReadSubsystemRegistry --> [*] : EndOfRegistry
+}
+
+
+CheckSubsystems --> EvaluateSystemState
+
+state EvaluateSystemState {
+
+state c <<choice>>
+state j <<join>>
+state Down : Notify user
+state Warning : Notify user
+
+[*] --> c
+c --> Down : [Any subsystem down]
+c --> Warning : [Any subsystem has warning]
+c --> Up : [All subsystems up]
+
+Down --> j
+Warning --> j
+Up --> j
+
+j --> [*]
+}
+
+EvaluateSystemState --> CheckSubsystems : Sleep(timeout)
+
+state NotificationReceived : Update subsystem state\nin the registry
+NotificationReceived -down-> EvaluateSystemState
+
+CheckSubsystems -> [*] : SystemShutdown
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+actor User
+participant CentralPC as "Central PC"
+participant ss as "Subsystem1..n"
+
+autonumber
+User -> CentralPC : Restart
+CentralPC -> ss : Restart broadcast
+ss -> COTS1 : Restart
+ss -> COTS2 : Restart
+...
+ss -> COTSn : Restart
+...
+...
+COTS1 --> ss : Result
+COTS2 --> ss : Result
+...
+COTSn --> ss : Result
+ss --> CentralPC : Result
+CentralPC --> User : Result
+@enduml

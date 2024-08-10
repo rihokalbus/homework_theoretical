@@ -1,0 +1,36 @@
+@startuml
+scale 500 width
+
+[*] --> CheckSubsystem : HealthRequest
+
+state CheckSubsystem {
+
+state "Read COTS Registry" as ReadRegistry
+state "Process COTS state" as ProcessState
+
+[*] --> ReadRegistry
+ReadRegistry --> ProcessState : [NextItem]
+ProcessState --> ReadRegistry
+ReadRegistry --> [*] : EndOfRegistry
+}
+
+state EvaluateSubsystemState {
+
+state c <<choice>>
+state j <<join>>
+
+[*] --> c
+c --> Down : [Any timeout/Any level2 error]
+c --> Warning : [Any level1 error]
+c --> Up : [No errors]
+Down --> j
+Warning --> j
+Up --> j
+j --> [*]
+}
+
+CheckSubsystem --> EvaluateSubsystemState
+
+EvaluateSubsystemState --> [*] : HealthResponse(SubsystemState)
+
+@enduml

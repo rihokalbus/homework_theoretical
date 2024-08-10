@@ -1,0 +1,15 @@
+@startuml
+actor User
+participant CentralPC as "Central PC"
+participant Subsystem
+participant COTS
+
+autonumber
+User -> CentralPC : Restart function
+CentralPC -> Subsystem : Restart(Subsystem, Function)
+Subsystem -> COTS : Restart
+...
+COTS --> Subsystem : Result
+Subsystem --> CentralPC : Result
+CentralPC --> User : Result
+@enduml
