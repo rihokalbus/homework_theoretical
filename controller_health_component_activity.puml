@@ -1,0 +1,32 @@
+@startuml
+start
+
+partition operatingLoop {
+
+    while (powered?) is (yes)
+        split
+            :listen common bus;
+            switch (message?)
+            case (functionRestart)
+                :Initialize subsystem;
+                :Send restartResponse;
+            case (healthRequest)
+                :Read COTS devices registry;
+                :Evaluate subsystem health;
+                :Send healthResponse;
+            endswitch
+        split again
+            :Wait for notifications from embedded controllers;
+            switch (notification?)
+            case ()
+                :Read COTS devices registry;
+                :Evaluate subsystem health;
+                :Notify central health component;
+            endswitch
+        end split
+    endwhile
+}
+
+
+stop
+@enduml

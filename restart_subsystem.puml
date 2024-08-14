@@ -1,0 +1,10 @@
+@startuml
+
+object RestartSubsystemRequest
+RestartSubsystemRequest : timeStamp
+
+object RestartSubsystemResponse
+RestartSubsystemResponse : timeStamp
+RestartSubsystemResponse : result
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+
+object RestartFunctionRequest
+RestartFunctionRequest : controllerID
+RestartFunctionRequest : timeStamp
+
+object CotsID
+
+RestartFunctionRequest -> "1..*" CotsID
+
+object RestartFunctionResponse
+RestartFunctionResponse : controllerID
+RestartFunctionResponse : timeStamp
+
+object Result
+Result : CotsID
+Result : timeStamp
+Result : status
+
+RestartFunctionResponse -> "1..*" Result
+
+@enduml

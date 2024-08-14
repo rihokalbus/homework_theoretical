@@ -2,23 +2,11 @@
 actor User
 participant CentralPC as "Central PC"
 participant Subsystem
-participant COTS1
-participant COTS2
-participant COTSn
 
 autonumber
 User -> CentralPC : Restart subsystem
 CentralPC -> Subsystem : Restart(Subsystem)
-Subsystem -> COTS1 : Restart
-Subsystem -> COTS2 : Restart
 ...
-Subsystem -> COTSn : Restart
-...
-...
-COTS1 --> Subsystem : Result
-COTS2 --> Subsystem : Result
-...
-COTSn --> Subsystem : Result
 Subsystem --> CentralPC : Result
 CentralPC --> User : Result
 @enduml

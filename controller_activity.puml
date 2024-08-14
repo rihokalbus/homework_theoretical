@@ -3,9 +3,9 @@ start
 
 partition initController {
 repeat
-    :next item from the COTS registry;
-    :initialize COTS;
-    :write status to the COTS registry;
+    :Next item from the COTS devices registry;
+    :Initialize COTS device;
+    :Write status to the COTS devices registry;
     if (status?) then (error)
         :notify health component;
     endif
@@ -16,22 +16,27 @@ partition operatingLoop {
 
     while (powered?) is (yes)
         split
-            :listen common bus;
+            :Listen common bus;
             switch (message?)
             case (functionRestart)
-                :initialize COTS;
-                :write status to the COTS registry;
-                if (status?) then (error)
-                    :notify health component;
-                endif
-            case ( controllerRestart )
-                :goto initController;
+                switch (next device id?)
+                case (device id)
+                    :Initialize COTS device;
+                    :Update device's status in the COTS devices registry;
+                    if (status?) then (error)
+                        :Notify health component;
+                    endif
+                case (end of list)
+                endswitch
+                :Send restartResponse;
+            case (others)
+                :processMessage;
             endswitch
         split again
             :Read COTSn status from the registry;
             if (status?) then (not Down)
                 :Control COTSn;
-                :Update status in the COTS registry;
+                :Update device's status in the COTS devices registry;
                 switch (result?)
                 case (OK)
                     :Pass;
@@ -41,7 +46,7 @@ partition operatingLoop {
             endif
         end split
     endwhile
-
 }
+
 stop
 @enduml

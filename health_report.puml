@@ -1,0 +1,16 @@
+@startuml
+
+object HealthReport
+HealthReport : controllerID
+HealthReport : timeStamp
+HealthReport : controllerStatus
+
+object CotsStatus
+CotsStatus : cotsID
+CotsStatus : timeStamp
+CotsStatus : status
+CotsStatus : error
+
+HealthReport -> "1..*" CotsStatus
+
+@enduml
