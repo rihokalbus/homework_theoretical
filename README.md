@@ -23,7 +23,8 @@ If an error occurs in the device, the controller software updates the status of 
 register and notifies the health component.
 
 The health component of the subsystem provides information to the health component of the central PC using
-[health reports](./health_report.puml). Health reports are provided either in response to a central component's health
+[health reports](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/rihokalbus/homework_theoretical/master/health_report.puml).
+Health reports are provided either in response to a central component's health
 request, or asynchronously, upon receiving a notification from the embedded controller. The health component has
 its own common bus listener to exchange messages with the central PC.
 
