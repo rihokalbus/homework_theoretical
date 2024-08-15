@@ -27,6 +27,5 @@ partition operatingLoop {
     endwhile
 }
 
-
 stop
 @enduml
