@@ -1,0 +1,33 @@
+@startuml
+partition operatingLoop {
+
+    while (powered?) is (yes)
+        split
+            :listen common bus;
+            switch (message?)
+                case (healthReport)
+                    :stop timer n;
+                case (healthNotification)
+            endswitch
+            :Update subsystems registry;
+            :Evaluate systems health;
+        split again
+            :Wait for timeout);
+            switch (timeout?)
+                case (timeout n)
+                    :Update subsystems registry;
+                    :Evaluate systems health;
+                case ()
+            endswitch
+        split again
+            repeat
+                :Get item from subsystems registry;
+                :Send out healthRequest n;
+                :Start timer n;
+            repeat while (nextItem n) is (not null)
+            :sleep;
+        end split
+    endwhile
+}
+
+@enduml
